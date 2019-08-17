@@ -1,4 +1,4 @@
-package com.bioprac.controller;
+package com.bioprac.controller.question;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bioprac.model.Question;
-import com.bioprac.repository.QuestionRepository;
+import com.bioprac.model.question.Question;
+import com.bioprac.repository.question.QuestionRepository;
+import com.bioprac.util.BiopracResponse;
 
 @RestController
 @RequestMapping("/questions")
@@ -36,17 +38,21 @@ public class QuestionController {
 		return questionRepository.findAll();
 	}
 	
+	
+     
+	
 	@PostMapping("/addQuestion")
-	public Map<String, Object> addQuestion(@Valid @RequestBody Question question) {
+	public ResponseEntity<?> addQuestion(@Valid @RequestBody Question question) {
 		
 		questionRepository.save(question);
 		
 		Map<String, Object> responseMap = new HashMap<>();
 		
-		responseMap.put("success", true);
 		responseMap.put("questionId", question.getId());
 		
-		return responseMap;
+		BiopracResponse biopracResponse = new BiopracResponse(true, "Question added Successfully", responseMap);
+		
+		return ResponseEntity.ok(biopracResponse);
 		
 	}
 	
@@ -60,22 +66,23 @@ public class QuestionController {
 
 	
 	@DeleteMapping("/deleteQuestion/{id}")
-	public Map<String, Object> deleteQuestion(@PathVariable @Min(1) int id) {
+	public ResponseEntity<?> deleteQuestion(@PathVariable @Min(1) int id) {
 		
 		questionRepository.deleteById(id);
 		
 		Map<String, Object> responseMap = new HashMap<>();
 		
-		responseMap.put("success", true);
 		responseMap.put("deletedQuestionId", id);
 		
-		return responseMap;
+		BiopracResponse biopracResponse = new BiopracResponse(true, "Question deleted Successfully", responseMap);
+		
+		return ResponseEntity.ok(biopracResponse);
 		
 	}
 	
 	
 	@PutMapping("/updateQuestion")
-	public Map<String, Object> updateQuestion(@Valid @RequestBody Question question) {
+	public ResponseEntity<?> updateQuestion(@Valid @RequestBody Question question) {
 		
 		Optional<Question> optionalQuestion = questionRepository.findById(question.getId());
 		
@@ -91,7 +98,9 @@ public class QuestionController {
 			responseMap.put("successMessage", "No such question");
 		}
 		
-		return responseMap;
+		BiopracResponse biopracResponse = new BiopracResponse(true, "Question updated Successfully", responseMap);
+		
+		return ResponseEntity.ok(biopracResponse);
 		
 	}
 

@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import com.bioprac.model.Question;
-import com.bioprac.repository.QuestionRepository;
+import com.bioprac.model.question.Question;
+import com.bioprac.repository.question.QuestionRepository;
 
 @DataJpaTest
 public class QuestionRepositoryTest {

@@ -1,4 +1,4 @@
-package com.bioprac.controller;
+package com.bioprac.controller.question;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bioprac.model.QuestionResult;
-import com.bioprac.repository.QuestionResultRepository;
+import com.bioprac.model.question.QuestionResult;
+import com.bioprac.repository.question.QuestionResultRepository;
 
 @RestController
 @RequestMapping("/questions/results")

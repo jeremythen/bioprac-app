@@ -1,4 +1,4 @@
-package com.bioprac.model;
+package com.bioprac.model.question;
 
 import java.time.LocalDateTime;
 

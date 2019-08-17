@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bioprac.controller.QuestionControllerTest;
-import com.bioprac.model.Question;
-import com.bioprac.repository.QuestionRepository;
+import com.bioprac.controller.question.QuestionController;
+import com.bioprac.model.question.Question;
+import com.bioprac.repository.question.QuestionRepository;
 
 
 @WebMvcTest(controllers = QuestionController.class)
