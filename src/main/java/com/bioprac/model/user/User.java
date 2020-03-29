@@ -5,6 +5,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,7 +14,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
-@NamedQuery(name = "User.findAllUsers", query = "SELECT u.username, u.id, u.email FROM User u")
+//@NamedQuery(name = "User.findAllUsers", query = "SELECT u.username, u.id, u.email FROM User u")
 public class User {
 	
 	@Id
@@ -36,11 +38,13 @@ public class User {
 	@Email
 	private String email;
 	
+	@JsonIgnore
 	@NotBlank
 	@Size(min = 6, max = 250)
 	@Column(nullable = false)
 	private String password;
 	
+	//@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
@@ -104,8 +108,8 @@ public class User {
 	@Override
 	public String toString() {
 		final String userDescription = String.format
-					("{id: %s, username: %s, name: %s, lastName: %s, email: %s, roles: %s}",
-					id, username, name, lastName, email, roles);
+					("{id: %s, username: %s, name: %s, lastName: %s, email: %s}",
+					id, username, name, lastName, email);
 		
 		return userDescription;
 	}

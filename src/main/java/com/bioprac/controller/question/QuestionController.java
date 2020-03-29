@@ -31,17 +31,14 @@ public class QuestionController {
 	@Autowired
 	private QuestionRepository questionRepository;
 	
-	@GetMapping("/getQuestions")
+	@GetMapping()
 	@ResponseBody
 	public Iterable<Question> getQuestions() {
 		
 		return questionRepository.findAll();
 	}
 	
-	
-     
-	
-	@PostMapping("/addQuestion")
+	@PostMapping()
 	public ResponseEntity<?> addQuestion(@Valid @RequestBody Question question) {
 		
 		questionRepository.save(question);
@@ -56,7 +53,7 @@ public class QuestionController {
 		
 	}
 	
-	@GetMapping("/getQuestions/{category}")
+	@GetMapping("/{category}")
 	@ResponseBody
 	public Iterable<Question> getQuestions(@PathVariable String category) {
 		
@@ -65,7 +62,7 @@ public class QuestionController {
 	}
 
 	
-	@DeleteMapping("/deleteQuestion/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteQuestion(@PathVariable @Min(1) int id) {
 		
 		questionRepository.deleteById(id);
@@ -81,10 +78,10 @@ public class QuestionController {
 	}
 	
 	
-	@PutMapping("/updateQuestion")
-	public ResponseEntity<?> updateQuestion(@Valid @RequestBody Question question) {
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateQuestion(@PathVariable @Min(1) int id, @Valid @RequestBody Question question) {
 		
-		Optional<Question> optionalQuestion = questionRepository.findById(question.getId());
+		Optional<Question> optionalQuestion = questionRepository.findById(id);
 		
 		Map<String, Object> responseMap = new HashMap<>();
 		
@@ -93,7 +90,7 @@ public class QuestionController {
 			questionRepository.save(question);
 			responseMap.put("success", true);
 			responseMap.put("successMessage","Question updated");
-		}else {
+		} else {
 			responseMap.put("success", false);
 			responseMap.put("successMessage", "No such question");
 		}

@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(POST, "/register").permitAll()
 		.antMatchers(POST, "/login").permitAll()
 		.antMatchers(GET, "/questions/*").permitAll()
-		.antMatchers(GET, "/getUsers").hasRole("ADMIN")
+		.antMatchers(GET, "/users").hasRole("ADMIN")
 		.antMatchers(POST, "/questions").hasAnyRole("ADMIN", "MODERATOR", "USER")
 		.antMatchers(DELETE, "/questions").hasAnyRole("ADMIN", "MODERATOR")
 		.antMatchers(PUT, "/questions").hasAnyRole("ADMIN", "MODERATOR", "USER")

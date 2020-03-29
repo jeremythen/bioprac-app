@@ -11,7 +11,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	public boolean existsByUsername(String username);
 	
-	public Iterable<User> findAllUsers();
+	//public Iterable<User> findAllUsers();
 	
 }
 

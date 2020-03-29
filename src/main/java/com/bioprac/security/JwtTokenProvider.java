@@ -36,6 +36,7 @@ public class JwtTokenProvider {
     }
 
     public int getUserIdFromJWT(String token) {
+    	System.out.println("JwtTokenProvider in getUserIdFromJWT");
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
@@ -45,6 +46,7 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String authToken) {
+    	System.out.println("JwtTokenProvider in validateToken");
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;

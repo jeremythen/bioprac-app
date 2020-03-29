@@ -1,8 +1,13 @@
 HELP.md
+
+application.properties
+data.sql
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+bin/
 
 ### STS ###
 .apt_generated
@@ -29,3 +34,4 @@ build/
 
 ### VS Code ###
 .vscode/
+

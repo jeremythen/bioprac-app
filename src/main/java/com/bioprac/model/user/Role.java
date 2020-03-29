@@ -4,10 +4,13 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "role")
 public class Role {
 	
+	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "role_id")
@@ -16,6 +19,7 @@ public class Role {
 	@Column(length = 20)
 	private String name;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> users;
 	
@@ -51,7 +55,7 @@ public class Role {
 	@Override
 	public String toString() {
 		
-		final String roleDescription = String.format("{ id: %s, name: %s, users: %s }", id, name, users);
+		final String roleDescription = String.format("{ id: %s, name: %s }", id, name);
 		
 		return roleDescription;
 	}

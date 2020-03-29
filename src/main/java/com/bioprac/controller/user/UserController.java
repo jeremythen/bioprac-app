@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,18 +64,18 @@ public class UserController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        
         String jwt = tokenProvider.generateToken(authentication);
         
-        BiopracResponse biopracResponse = new BiopracResponse(true, "User registered successfully", new JwtAuthenticationResponse(jwt));
+        BiopracResponse biopracResponse = new BiopracResponse(true, "User logged in successfully", new JwtAuthenticationResponse(jwt));
    
         return ResponseEntity.ok(biopracResponse);
 		
 	}
 	
-	@PostMapping("/getUsers")
+	@GetMapping("/users")
 	public Iterable<User> getUsers() {
-		return userRepository.findAllUsers();
+		return userRepository.findAll();
 	}
 
 }
