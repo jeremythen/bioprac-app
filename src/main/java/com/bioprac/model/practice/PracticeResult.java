@@ -1,4 +1,4 @@
-package com.bioprac.model.question;
+package com.bioprac.model.practice;
 
 import java.time.LocalDateTime;
 
@@ -7,22 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Entity(name = "Question_Result")
-public class QuestionResult {
+@Entity(name = "practice_result")
+public class PracticeResult {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@NotBlank
-	@Column(name = "created_by", length = 25)
-	private String createdBy;
+	@Column(name = "user_name")
+	private String userName;
 	
 	@NotNull
-	private int question;
+	@Column(name = "question_id")
+	private int questionId;
 	
 	@Column(nullable = false, length = 15)
 	private String result;
@@ -38,20 +37,20 @@ public class QuestionResult {
 		this.id = id;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public int getQuestion() {
-		return question;
+	public int getQuestionId() {
+		return questionId;
 	}
 
-	public void setQuestion(int question) {
-		this.question = question;
+	public void setQuestionId(int question) {
+		this.questionId = question;
 	}
 
 	public String getResult() {
@@ -72,7 +71,7 @@ public class QuestionResult {
 
 	@Override
 	public String toString() {
-		return "QuestionResult [id=" + id + ", createdBy=" + createdBy + ", question=" + question + ", result=" + result
+		return "QuestionResults [id=" + id + ", userId=" + userName + ", question=" + questionId + ", result=" + result
 				+ ", createdAt=" + createdAt + "]";
 	}
 

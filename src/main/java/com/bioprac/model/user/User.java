@@ -38,13 +38,13 @@ public class User {
 	@Email
 	private String email;
 	
-	@JsonIgnore
+	//@JsonIgnore
 	@NotBlank
 	@Size(min = 6, max = 250)
 	@Column(nullable = false)
 	private String password;
 	
-	//@JsonIgnore
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;

@@ -39,7 +39,7 @@ public class UserController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody User user) {
-		
+
 		if(userRepository.existsByEmail(user.getEmail())) {
 			return new ResponseEntity<>(new BiopracResponse(false, "Email is already taken."), BAD_REQUEST);
 		}
@@ -51,6 +51,7 @@ public class UserController {
 		userService.save(user);
 		
 		return ResponseEntity.ok(new BiopracResponse(true, "User registered successfully"));
+
 	}
 	
 	@PostMapping("/login")
