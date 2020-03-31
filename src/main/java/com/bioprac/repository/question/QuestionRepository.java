@@ -9,5 +9,9 @@ import com.bioprac.model.question.Question;
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
 	public Iterable<Question> findAllByCategory(String category);
+
+	public Iterable<Question> findAllByCreatedBy(String createdBy);
+
+	public Iterable<Question> findAllByCategoryAndSubcategory(String category, String subcategory);
 	
 }

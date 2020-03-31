@@ -34,7 +34,6 @@ public class QuestionController {
 	@GetMapping()
 	@ResponseBody
 	public Iterable<Question> getQuestions() {
-		
 		return questionRepository.findAll();
 	}
 	
@@ -52,18 +51,18 @@ public class QuestionController {
 		return ResponseEntity.ok(biopracResponse);
 		
 	}
-	
-	@GetMapping("/{category}")
-	@ResponseBody
-	public Iterable<Question> getQuestions(@PathVariable String category) {
-		
-		return questionRepository.findAllByCategory(category);
-		
+
+	@GetMapping("/{id}")
+	public Question getQuestionById(@PathVariable int id) {
+
+		Optional<Question> optionalQuestion = questionRepository.findById(id);
+
+		return optionalQuestion.orElse(null);
+
 	}
 
-	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteQuestion(@PathVariable @Min(1) int id) {
+	public ResponseEntity.HeadersBuilder deleteQuestion(@PathVariable @Min(1) int id) {
 		
 		questionRepository.deleteById(id);
 		
@@ -73,10 +72,24 @@ public class QuestionController {
 		
 		BiopracResponse biopracResponse = new BiopracResponse(true, "Question deleted Successfully", responseMap);
 		
-		return ResponseEntity.ok(biopracResponse);
+		return ResponseEntity.noContent();
 		
 	}
-	
+
+	@GetMapping("/author/{userName}")
+	public Iterable<Question> getAuthorsQuestions(@PathVariable String userName) {
+		return questionRepository.findAllByCreatedBy(userName);
+	}
+
+	@GetMapping("/category/{category}")
+	public Iterable<Question> getQuestionsByCategory(@PathVariable String category) {
+		return questionRepository.findAllByCategory(category);
+	}
+
+	@GetMapping("/category/{category}/subcategory/{subcategory}")
+	public Iterable<Question> getQuestionsByCategoryAndSubcategory(@PathVariable String category, @PathVariable String subcategory) {
+		return questionRepository.findAllByCategoryAndSubcategory(category, subcategory);
+	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateQuestion(@PathVariable @Min(1) int id, @Valid @RequestBody Question question) {

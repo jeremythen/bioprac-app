@@ -9,8 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "role")
 public class Role {
-	
-	@JsonIgnore
+
+	public Role() {
+		this.name = "USER";
+	}
+	public Role(String name) {
+		this.name = name;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "role_id")
@@ -18,12 +24,11 @@ public class Role {
 	
 	@Column(length = 20)
 	private String name;
-	
+
 	@JsonIgnore
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> users;
-	
-	
+
 	public int getId() {
 		return id;
 	}
@@ -36,22 +41,10 @@ public class Role {
 		return name;
 	}
 
-	public void Name(String role) {
-		this.name = role;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Set<User> getUsers() {
-		return users;
-	}
-	
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-	
 	@Override
 	public String toString() {
 		

@@ -1,82 +1,85 @@
 package com.bioprac.controller.user;
 
-import javax.validation.Valid;
-import java.util.Map;
-
-import static org.springframework.http.HttpStatus.*;
+import com.bioprac.model.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bioprac.model.user.User;
 import com.bioprac.repository.user.UserRepository;
-import com.bioprac.security.JwtAuthenticationResponse;
-import com.bioprac.security.JwtTokenProvider;
-import com.bioprac.security.UserService;
-import com.bioprac.util.BiopracResponse;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
-	
-	@Autowired
-	private UserService userService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
-	@Autowired
-    JwtTokenProvider tokenProvider;
-
-	@PostMapping("/register")
-	public ResponseEntity<?> register(@Valid @RequestBody User user) {
-
-		if(userRepository.existsByEmail(user.getEmail())) {
-			return new ResponseEntity<>(new BiopracResponse(false, "Email is already taken."), BAD_REQUEST);
-		}
-		
-		if(userRepository.existsByUsername(user.getUsername())) {
-			return new ResponseEntity<>(new BiopracResponse(false, "Username is already taken."), BAD_REQUEST);
-		}
-		
-		userService.save(user);
-		
-		return ResponseEntity.ok(new BiopracResponse(true, "User registered successfully"));
-
-	}
-	
-	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody Map<String, Object> userMap) {
-		
-		final String username = (String) userMap.get("username");
-		final String password = (String) userMap.get("password");
-		
-		Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        String jwt = tokenProvider.generateToken(authentication);
-        
-        BiopracResponse biopracResponse = new BiopracResponse(true, "User logged in successfully", new JwtAuthenticationResponse(jwt));
-   
-        return ResponseEntity.ok(biopracResponse);
-		
-	}
-	
-	@GetMapping("/users")
+	@GetMapping()
 	public Iterable<User> getUsers() {
 		return userRepository.findAll();
+	}
+
+	@PostMapping
+	public User createUser(@Valid @RequestBody User user) {
+
+		return userRepository.save(user);
+
+	}
+
+	@PutMapping()
+	public ResponseEntity.HeadersBuilder updateUser(@Valid @RequestBody User user) {
+		userRepository.save(user);
+		return ResponseEntity.noContent();
+	}
+
+	@GetMapping("/{userName}")
+	public User getUserByUserName(@PathVariable String userName) {
+		return userRepository.findByUsername(userName);
+	}
+
+	@DeleteMapping("/{userName}")
+	public ResponseEntity.HeadersBuilder deleteUserByUserName(@PathVariable String userName) {
+
+		User user = userRepository.findByUsername(userName);
+
+		userRepository.delete(user);
+
+		return ResponseEntity.noContent();
+
+	}
+
+	@PostMapping("/{userName}/role")
+	public User addUserRole(@PathVariable String userName, @RequestBody Map<String, String> requestMap) {
+
+		User user = userRepository.findByUsername(userName);
+
+		String roleName = requestMap.get("role");
+
+		Role role = new Role(roleName);
+
+		user.getRoles().add(role);
+
+		userRepository.save(user);
+
+		return user;
+
+	}
+
+	@DeleteMapping("/{userName}/role/{roleName}")
+	public User removeUserRole(@PathVariable String userName, @PathVariable String roleName) {
+
+		User user = userRepository.findByUsername(userName);
+
+		user.getRoles().remove(roleName);
+
+		userRepository.save(user);
+
+		return user;
+
 	}
 
 }
