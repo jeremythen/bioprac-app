@@ -2,14 +2,11 @@ package com.bioprac.model.practice;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity(name = "important_question")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"question_id", "user_name"}))
 public class ImportantQuestion {
 	
 	@Id
@@ -19,7 +16,6 @@ public class ImportantQuestion {
 	@Column(nullable = false, name = "user_name")
 	private String userName;
 
-	@NotBlank
 	@Column(nullable = false, name = "question_id")
 	private int questionId;
 
@@ -36,7 +32,7 @@ public class ImportantQuestion {
 
 	@NotBlank
 	@Column(name = "practice_subcategory")
-	private String practiceSucategory;
+	private String practiceSubcategory;
 
 	public int getId() {
 		return id;
@@ -78,12 +74,12 @@ public class ImportantQuestion {
 		this.practiceCategory = practiceSubject;
 	}
 
-	public String getPracticeSucategory() {
-		return practiceSucategory;
+	public String getPracticeSubcategory() {
+		return practiceSubcategory;
 	}
 
-	public void setPracticeSucategory(String practiceSubsubject) {
-		this.practiceSucategory = practiceSubsubject;
+	public void setPracticeSubcategory(String practiceSubsubject) {
+		this.practiceSubcategory = practiceSubsubject;
 	}
 
 	public String getPracticeType() {

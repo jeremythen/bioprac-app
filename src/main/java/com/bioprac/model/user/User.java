@@ -5,10 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.*;
 
@@ -37,17 +34,15 @@ public class User {
 	@Column(length = 50, nullable = false, unique = true)
 	@Email
 	private String email;
-	
+
 	//@JsonIgnore
 	@NotBlank
 	@Size(min = 6, max = 250)
 	@Column(nullable = false)
 	private String password;
-	
-	//@JsonIgnore
-	@ManyToMany
-	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles;
+
+	@Column(name = "role", length = 20)
+	private String role;
 	
 	public int getId() {
 		return id;
@@ -81,14 +76,6 @@ public class User {
 		this.password = password;
 	}
 	
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-	
 	public String getUsername() {
 		return username;
 	}
@@ -104,7 +91,15 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
 		final String userDescription = String.format

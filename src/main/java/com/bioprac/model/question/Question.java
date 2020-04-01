@@ -31,7 +31,7 @@ public class Question {
 	private String type;
 	
 	@NotBlank
-	@Column(length = 1000, nullable = false, unique = true)
+	@Column(length = 1000, nullable = false)
 	private String question;
 	
 	@NotBlank

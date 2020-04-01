@@ -32,41 +32,41 @@ public class PracticeController {
     }
 
     @PostMapping("/questions/important")
-    public ResponseEntity.HeadersBuilder saveNewUserImportantQuestion(@Valid @RequestBody ImportantQuestion importantQuestion) {
+    public ImportantQuestion saveNewUserImportantQuestion(@Valid @RequestBody ImportantQuestion importantQuestion) {
 
         importantQuestionRepository.save(importantQuestion);
 
-        return ResponseEntity.noContent();
+        return importantQuestion;
 
     }
 
     @DeleteMapping("/questions/important/{importantQuestionId}")
-    public ResponseEntity.HeadersBuilder deleteImportantQuestionById(@PathVariable int importantQuestionId) {
+    public ResponseEntity deleteImportantQuestionById(@PathVariable int importantQuestionId) {
 
         importantQuestionRepository.deleteById(importantQuestionId);
 
-        return ResponseEntity.noContent();
+        return ResponseEntity.noContent().build();
 
     }
 
     @GetMapping("/questions/result/{userName}")
-    public PracticeResult getUserResultQuestionByUserId(@PathVariable String userName) {
+    public Iterable<PracticeResult> getUserResultQuestionByUserId(@PathVariable String userName) {
 
-        return practiceResultRepository.findByUserName(userName);
+        return practiceResultRepository.findAllByUserName(userName);
 
     }
 
     @PostMapping("/questions/result")
-    public ResponseEntity.HeadersBuilder saveNewPracticeResult(@Valid @RequestBody PracticeResult practiceResult) {
+    public PracticeResult saveNewPracticeResult(@Valid @RequestBody PracticeResult practiceResult) {
 
         practiceResultRepository.save(practiceResult);
 
-        return ResponseEntity.noContent();
+        return practiceResult;
 
     }
 
-    @GetMapping("/questions/new/{userId}")
-    public Iterable<Question> getUserNewQuestions(@PathVariable int userId) {
+    @GetMapping("/questions/new/{userName}")
+    public Iterable<Question> getUserNewQuestions(@PathVariable String userName) {
 
         return questionRepository.findAll();
 

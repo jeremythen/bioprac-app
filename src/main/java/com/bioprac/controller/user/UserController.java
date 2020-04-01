@@ -1,8 +1,14 @@
 package com.bioprac.controller.user;
 
-import com.bioprac.model.user.Role;
+import com.bioprac.security.JwtAuthenticationResponse;
+import com.bioprac.security.JwtTokenProvider;
+import com.bioprac.util.BiopracResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.bioprac.model.user.User;
@@ -17,6 +23,12 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	JwtTokenProvider tokenProvider;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	@GetMapping()
 	public Iterable<User> getUsers() {
@@ -24,10 +36,29 @@ public class UserController {
 	}
 
 	@PostMapping
-	public User createUser(@Valid @RequestBody User user) {
+	public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
 
-		return userRepository.save(user);
+		String username = user.getUsername();
+		String password = user.getPassword();
 
+		user.setRole("ROLE_USER");
+
+		return getResponseEntity(username, password, authenticationManager, tokenProvider);
+
+	}
+
+	public static ResponseEntity<?> getResponseEntity(String username, String password, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(username, password)
+		);
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		String jwt = tokenProvider.generateToken(authentication);
+
+		BiopracResponse biopracResponse = new BiopracResponse(true, "User logged in successfully", new JwtAuthenticationResponse(jwt));
+
+		return ResponseEntity.ok(biopracResponse);
 	}
 
 	@PutMapping()
@@ -57,12 +88,6 @@ public class UserController {
 
 		User user = userRepository.findByUsername(userName);
 
-		String roleName = requestMap.get("role");
-
-		Role role = new Role(roleName);
-
-		user.getRoles().add(role);
-
 		userRepository.save(user);
 
 		return user;
@@ -73,8 +98,6 @@ public class UserController {
 	public User removeUserRole(@PathVariable String userName, @PathVariable String roleName) {
 
 		User user = userRepository.findByUsername(userName);
-
-		user.getRoles().remove(roleName);
 
 		userRepository.save(user);
 

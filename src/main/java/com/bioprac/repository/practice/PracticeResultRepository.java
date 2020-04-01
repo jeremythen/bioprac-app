@@ -8,6 +8,6 @@ import com.bioprac.model.practice.PracticeResult;
 @Repository
 public interface PracticeResultRepository extends JpaRepository<PracticeResult, Integer> {
 
-	public PracticeResult findByUserName(String userName);
+	public Iterable<PracticeResult> findAllByUserName(String userName);
 
 }

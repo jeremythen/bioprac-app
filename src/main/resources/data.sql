@@ -1,10 +1,12 @@
-insert into role (role_id, name) values('100', 'ROLE_USER');
-insert into role (role_id, name) values('101', 'MODERATOR');
-insert into role (role_id, name) values('102', 'ROLE_ADMIN');
+--insert into role (role_id, name) values('100', 'ROLE_USER');
+--insert into role (role_id, name) values('101', 'MODERATOR');
+--insert into role (role_id, name) values('102', 'ROLE_ADMIN');
 
 -- INSERT INTO `user_role`(user_id, role_id) VALUES(1, 100);
 -- INSERT INTO `user_role`(user_id, role_id) VALUES(1, 101);
 -- INSERT INTO `user_role`(user_id, role_id) VALUES(1, 102);
+
+-- ALTER TABLE `important_question` ADD UNIQUE `unique_index`(`question_id`, `user_name`);
 
 /*
 insert into question 

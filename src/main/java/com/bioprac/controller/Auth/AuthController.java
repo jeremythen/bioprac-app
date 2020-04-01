@@ -1,13 +1,12 @@
 package com.bioprac.controller.Auth;
 
-import com.bioprac.model.user.Role;
+import com.bioprac.controller.user.UserController;
 import com.bioprac.model.user.User;
-import com.bioprac.repository.user.RoleRepository;
 import com.bioprac.repository.user.UserRepository;
 import com.bioprac.security.JwtAuthenticationResponse;
 import com.bioprac.security.JwtTokenProvider;
-import com.bioprac.security.UserService;
 import com.bioprac.util.BiopracResponse;
+import org.slf4j.ILoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,13 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -30,19 +26,13 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
     JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
@@ -55,15 +45,9 @@ public class AuthController {
             return new ResponseEntity<>(new BiopracResponse(false, "Username is already taken."), BAD_REQUEST);
         }
 
-        Set<Role> roles = new HashSet<>();
+        user.setRole("ROLE_USER");
 
-        roles.add(new Role("USER"));
-
-        user.setRoles(roles);
-
-        userService.save(user);
-
-        return ResponseEntity.ok(new BiopracResponse(true, "User registered successfully"));
+        return ResponseEntity.ok(user);
 
     }
 
@@ -73,17 +57,7 @@ public class AuthController {
         final String username = (String) userMap.get("username");
         final String password = (String) userMap.get("password");
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = tokenProvider.generateToken(authentication);
-
-        BiopracResponse biopracResponse = new BiopracResponse(true, "User logged in successfully", new JwtAuthenticationResponse(jwt));
-
-        return ResponseEntity.ok(biopracResponse);
+        return UserController.getResponseEntity(username, password, authenticationManager, tokenProvider);
 
     }
 

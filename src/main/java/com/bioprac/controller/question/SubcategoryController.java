@@ -5,13 +5,7 @@ import com.bioprac.model.question.Subcategory;
 import com.bioprac.repository.question.SubcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/subcategories")
@@ -26,29 +20,29 @@ public class SubcategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addSubcategory(@Valid Subcategory subcategory) {
+    public Subcategory addSubcategory(@Valid @RequestBody Subcategory subcategory) {
 
         subcategoryRepository.save(subcategory);
 
-        return ResponseEntity.ok(subcategory);
+        return subcategory;
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity.HeadersBuilder updateSubcategory(@Valid Subcategory subcategory) {
+    public Subcategory updateSubcategory(@Valid @RequestBody Subcategory subcategory) {
 
         subcategoryRepository.save(subcategory);
 
-        return ResponseEntity.noContent();
+        return subcategory;
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.HeadersBuilder deleteSubcategory(@PathVariable int id) {
+    public ResponseEntity deleteSubcategory(@PathVariable int id) {
 
         subcategoryRepository.deleteById(id);
 
-        return ResponseEntity.noContent();
+        return ResponseEntity.noContent().build();
 
     }
 

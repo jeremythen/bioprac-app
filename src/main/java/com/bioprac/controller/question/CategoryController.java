@@ -5,13 +5,7 @@ import com.bioprac.model.question.Category;
 import com.bioprac.repository.question.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/categories")
@@ -26,7 +20,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCategory(@Valid Category category) {
+    public ResponseEntity<?> addCategory(@Valid @RequestBody Category category) {
 
         categoryRepository.save(category);
 
@@ -35,20 +29,20 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity.HeadersBuilder updateCategory(@Valid Category category) {
+    public Category updateCategory(@Valid @RequestBody Category category) {
 
         categoryRepository.save(category);
 
-        return ResponseEntity.noContent();
+        return category;
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.HeadersBuilder deleteCategory(@PathVariable int id) {
+    public ResponseEntity deleteCategory(@PathVariable int id) {
 
         categoryRepository.deleteById(id);
 
-        return ResponseEntity.noContent();
+        return ResponseEntity.noContent().build();
 
     }
 

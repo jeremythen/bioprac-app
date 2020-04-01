@@ -1,5 +1,6 @@
 package com.bioprac.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -42,10 +43,11 @@ public class UserPrincipal implements UserDetails {
     }
 
     public static UserPrincipal create(User user) {
-    	
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-	        										.map(role -> new SimpleGrantedAuthority(role.getName())
-	        									).collect(Collectors.toList());
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
+
+        List<GrantedAuthority> authorities = grantedAuthorities;
 
         return new UserPrincipal(
                 user.getId(),

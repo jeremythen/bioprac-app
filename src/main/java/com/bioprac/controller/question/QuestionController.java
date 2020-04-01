@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bioprac.model.question.Question;
 import com.bioprac.repository.question.QuestionRepository;
 import com.bioprac.util.BiopracResponse;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 @RestController
 @RequestMapping("/questions")
@@ -62,17 +63,20 @@ public class QuestionController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity.HeadersBuilder deleteQuestion(@PathVariable @Min(1) int id) {
-		
-		questionRepository.deleteById(id);
-		
+	public ResponseEntity deleteQuestion(@PathVariable @Min(1) int id) {
+
 		Map<String, Object> responseMap = new HashMap<>();
-		
-		responseMap.put("deletedQuestionId", id);
-		
-		BiopracResponse biopracResponse = new BiopracResponse(true, "Question deleted Successfully", responseMap);
-		
-		return ResponseEntity.noContent();
+
+		Optional<Question> optionalQuestion = questionRepository.findById(id);
+
+		if(optionalQuestion.isPresent()) {
+			questionRepository.deleteById(id);
+			return ResponseEntity.noContent().build();
+		}
+
+		String responseMessage = "Question with id " + id + " doesn't exit.";
+		responseMap.put("message", responseMessage);
+		return ResponseEntity.badRequest().body(responseMap);
 		
 	}
 

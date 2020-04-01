@@ -10,11 +10,11 @@ public class Subcategory {
     private int id;
 
     @NotBlank
-    @Column(name="subcategory", length = 25)
+    @Column(name="subcategory", length = 25, unique = true)
     private String subcategory;
 
     @NotBlank
-    @Column(name="subcategory_key", length = 25)
+    @Column(name="subcategory_key", length = 25, unique = true)
     private String subcategoryKey;
 
     @NotBlank

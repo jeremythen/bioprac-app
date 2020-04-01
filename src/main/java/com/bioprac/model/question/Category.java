@@ -10,11 +10,11 @@ public class Category {
     private int id;
 
     @NotBlank
-    @Column(name="category", length = 25)
+    @Column(name="category", length = 25, unique = true)
     private String category;
 
     @NotBlank
-    @Column(name="category_key", length = 25)
+    @Column(name="category_key", length = 25, unique = true)
     private String categoryKey;
 
     public int getId() {
