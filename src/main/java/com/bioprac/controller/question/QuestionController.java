@@ -8,11 +8,9 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
-import com.sun.deploy.net.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bioprac.model.question.Question;
 import com.bioprac.repository.question.QuestionRepository;
 import com.bioprac.util.BiopracResponse;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 @RestController
 @RequestMapping("/questions")
@@ -55,9 +52,8 @@ public class QuestionController {
 	@DeleteMapping
 	public ResponseEntity<?> deleteQuestions() {
 
-
-
 		return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+
 	}
 	
 	@PostMapping()

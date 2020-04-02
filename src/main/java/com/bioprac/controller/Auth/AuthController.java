@@ -1,12 +1,9 @@
 package com.bioprac.controller.Auth;
 
-import com.bioprac.controller.user.UserController;
 import com.bioprac.model.user.User;
 import com.bioprac.repository.user.UserRepository;
 import com.bioprac.security.JwtAuthenticationResponse;
 import com.bioprac.security.JwtTokenProvider;
-import com.bioprac.util.BiopracResponse;
-import org.slf4j.ILoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

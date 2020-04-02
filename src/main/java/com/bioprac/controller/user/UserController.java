@@ -1,14 +1,9 @@
 package com.bioprac.controller.user;
 
-import com.bioprac.security.JwtAuthenticationResponse;
 import com.bioprac.security.JwtTokenProvider;
-import com.bioprac.util.BiopracResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.bioprac.model.user.User;
