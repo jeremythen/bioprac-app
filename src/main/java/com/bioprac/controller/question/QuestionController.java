@@ -8,7 +8,12 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import com.sun.deploy.net.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,15 +36,34 @@ public class QuestionController {
 	
 	@Autowired
 	private QuestionRepository questionRepository;
+
+	private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 	
 	@GetMapping()
 	@ResponseBody
 	public Iterable<Question> getQuestions() {
+
+		logger.info("In getQuestions()");
+		logger.error("Error in getQuestions");
+		logger.warn("Warn in getQuestions");
+		logger.debug("Debug in getQuestions");
+		logger.trace("Trace in getQuestions");
+
 		return questionRepository.findAll();
+	}
+
+	@DeleteMapping
+	public ResponseEntity<?> deleteQuestions() {
+
+
+
+		return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
 	}
 	
 	@PostMapping()
 	public ResponseEntity<?> addQuestion(@Valid @RequestBody Question question) {
+
+
 		
 		questionRepository.save(question);
 		

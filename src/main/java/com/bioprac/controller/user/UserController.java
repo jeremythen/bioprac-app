@@ -15,6 +15,7 @@ import com.bioprac.model.user.User;
 import com.bioprac.repository.user.UserRepository;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -38,27 +39,24 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
 
-		String username = user.getUsername();
-		String password = user.getPassword();
+		Map<String, Object> responseMap = new HashMap<>();
+
+		if(userRepository.existsByEmail(user.getEmail())) {
+			responseMap.put("message", "Email is already taken.");
+			return ResponseEntity.badRequest().body(responseMap);
+		}
+
+		if(userRepository.existsByUsername(user.getUsername())) {
+			responseMap.put("message", "Username is already taken.");
+			return ResponseEntity.badRequest().body(responseMap);
+		}
 
 		user.setRole("ROLE_USER");
 
-		return getResponseEntity(username, password, authenticationManager, tokenProvider);
+		userRepository.save(user);
 
-	}
+		return ResponseEntity.ok(user);
 
-	public static ResponseEntity<?> getResponseEntity(String username, String password, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(username, password)
-		);
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		String jwt = tokenProvider.generateToken(authentication);
-
-		BiopracResponse biopracResponse = new BiopracResponse(true, "User logged in successfully", new JwtAuthenticationResponse(jwt));
-
-		return ResponseEntity.ok(biopracResponse);
 	}
 
 	@PutMapping()
