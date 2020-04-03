@@ -4,6 +4,7 @@ import com.bioprac.model.user.User;
 import com.bioprac.repository.user.UserRepository;
 import com.bioprac.security.JwtAuthenticationResponse;
 import com.bioprac.security.JwtTokenProvider;
+import com.bioprac.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +19,14 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
 @RestController
 public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     JwtTokenProvider tokenProvider;
@@ -35,23 +37,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
 
-        Map<String, Object> responseMap = new HashMap<>();
-
-        if(userRepository.existsByEmail(user.getEmail())) {
-            responseMap.put("message", "Email is already taken.");
-            return ResponseEntity.badRequest().body(responseMap);
-        }
-
-        if(userRepository.existsByUsername(user.getUsername())) {
-            responseMap.put("message", "Username is already taken.");
-            return ResponseEntity.badRequest().body(responseMap);
-        }
-
-        user.setRole("ROLE_USER");
-
-        userRepository.save(user);
-
-        return ResponseEntity.ok(user);
+        return userService.save(user);
 
     }
 

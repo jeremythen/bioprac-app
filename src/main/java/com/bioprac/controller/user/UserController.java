@@ -1,6 +1,7 @@
 package com.bioprac.controller.user;
 
 import com.bioprac.security.JwtTokenProvider;
+import com.bioprac.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +13,7 @@ import com.bioprac.repository.user.UserRepository;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
@@ -24,7 +26,7 @@ public class UserController {
 	JwtTokenProvider tokenProvider;
 
 	@Autowired
-	private AuthenticationManager authenticationManager;
+	UserService userService;
 	
 	@GetMapping()
 	public Iterable<User> getUsers() {
@@ -34,23 +36,7 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
 
-		Map<String, Object> responseMap = new HashMap<>();
-
-		if(userRepository.existsByEmail(user.getEmail())) {
-			responseMap.put("message", "Email is already taken.");
-			return ResponseEntity.badRequest().body(responseMap);
-		}
-
-		if(userRepository.existsByUsername(user.getUsername())) {
-			responseMap.put("message", "Username is already taken.");
-			return ResponseEntity.badRequest().body(responseMap);
-		}
-
-		user.setRole("ROLE_USER");
-
-		userRepository.save(user);
-
-		return ResponseEntity.ok(user);
+		return userService.save(user);
 
 	}
 
@@ -61,8 +47,20 @@ public class UserController {
 	}
 
 	@GetMapping("/{userName}")
-	public User getUserByUserName(@PathVariable String userName) {
-		return userRepository.findByUsername(userName);
+	public ResponseEntity getUserByUserName(@PathVariable String userName) {
+
+		User user = userRepository.findByUsername(userName);
+
+		if(Objects.isNull(user)) {
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("message", "No user with username " + userName + " was found");
+			ResponseEntity.badRequest().body(responseMap);
+		}
+
+		Map<String, Object> userInfo = userService.getFilteredUser(user);
+
+		return ResponseEntity.ok(userInfo);
+
 	}
 
 	@DeleteMapping("/{userName}")
@@ -77,24 +75,24 @@ public class UserController {
 	}
 
 	@PostMapping("/{userName}/role")
-	public User addUserRole(@PathVariable String userName, @RequestBody Map<String, String> requestMap) {
+	public ResponseEntity.HeadersBuilder addUserRole(@PathVariable String userName, @RequestBody Map<String, String> requestMap) {
 
 		User user = userRepository.findByUsername(userName);
 
 		userRepository.save(user);
 
-		return user;
+		return ResponseEntity.noContent();
 
 	}
 
 	@DeleteMapping("/{userName}/role/{roleName}")
-	public User removeUserRole(@PathVariable String userName, @PathVariable String roleName) {
+	public ResponseEntity.HeadersBuilder removeUserRole(@PathVariable String userName, @PathVariable String roleName) {
 
 		User user = userRepository.findByUsername(userName);
 
 		userRepository.save(user);
 
-		return user;
+		return ResponseEntity.noContent();
 
 	}
 
