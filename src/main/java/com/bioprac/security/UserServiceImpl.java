@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		user.setRole(Roles.USER.name());
+		user.setRole("ROLE_" + Roles.USER.name());
 		userRepository.save(user);
 
 		responseMap = getFilteredUser(user);
