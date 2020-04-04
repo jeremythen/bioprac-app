@@ -1,19 +1,23 @@
 package com.bioprac.controller.user;
 
 import com.bioprac.security.JwtTokenProvider;
-import com.bioprac.security.UserService;
+import com.bioprac.service.UserService;
+import com.bioprac.util.Roles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import com.bioprac.model.user.User;
 import com.bioprac.repository.user.UserRepository;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/users")
@@ -27,6 +31,8 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@GetMapping()
 	public Iterable<User> getUsers() {
@@ -75,13 +81,36 @@ public class UserController {
 	}
 
 	@PostMapping("/{userName}/role")
-	public ResponseEntity.HeadersBuilder addUserRole(@PathVariable String userName, @RequestBody Map<String, String> requestMap) {
+	public ResponseEntity addUserRole(@PathVariable String userName, @RequestBody Map<String, String> requestMap) {
+
+		String newRole = requestMap.get("role");
+
+		logger.info("New role: " + newRole);
+
+		boolean isValidRole = Stream.of(Roles.values()).anyMatch(role -> role.toString().equals(newRole));
+
+		logger.info("isValidRole: " + isValidRole);
+
+		logger.info("Roles.values: " + Arrays.toString(Roles.values()));
+
+		if(!isValidRole) {
+			logger.info("!isValidRole: " + isValidRole);
+			Map<String, Object> responseBody = new HashMap<>();
+
+			responseBody.put("message", "Invalid role.");
+			responseBody.put("rolesAllowed", Roles.values());
+
+			return ResponseEntity.badRequest().body(responseBody);
+
+		}
 
 		User user = userRepository.findByUsername(userName);
 
+		user.setRole(newRole);
+
 		userRepository.save(user);
 
-		return ResponseEntity.noContent();
+		return ResponseEntity.noContent().build();
 
 	}
 

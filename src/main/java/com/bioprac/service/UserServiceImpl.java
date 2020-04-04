@@ -1,5 +1,6 @@
-package com.bioprac.security;
+package com.bioprac.service;
 
+import com.bioprac.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,7 @@ import com.bioprac.util.Roles;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,16 +30,18 @@ public class UserServiceImpl implements UserService {
 
 		if(userRepository.existsByEmail(user.getEmail())) {
 			responseMap.put("message", "Email is already taken.");
+			responseMap.put("ERROR_CODE", "EMAIL_TAKEN");
 			return ResponseEntity.badRequest().body(responseMap);
 		}
 
 		if(userRepository.existsByUsername(user.getUsername())) {
 			responseMap.put("message", "Username is already taken.");
+			responseMap.put("ERROR_CODE", "USERNAME_TAKEN");
 			return ResponseEntity.badRequest().body(responseMap);
 		}
 
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		user.setRole("ROLE_" + Roles.USER.name());
+		user.setRole(Roles.USER.name());
 		userRepository.save(user);
 
 		responseMap = getFilteredUser(user);

@@ -1,4 +1,4 @@
-package com.bioprac.security;
+package com.bioprac.service;
 
 import com.bioprac.model.user.User;
 import org.springframework.http.ResponseEntity;

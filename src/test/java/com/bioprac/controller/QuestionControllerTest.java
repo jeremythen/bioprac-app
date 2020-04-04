@@ -48,7 +48,7 @@ public class QuestionControllerTest {
 		when(questionController.getQuestions()).thenReturn(questions);
 		
 		MvcResult mvcResult = mockMvc.perform(
-					get("/questions/getQuestions")
+					get("/questions")
 					.content("application/json")
 				)
 				.andExpect(status().isOk())
@@ -68,7 +68,7 @@ public class QuestionControllerTest {
 		Question question = createQuestion();
 		
 		mockMvc.perform(
-					post("/questions/addQuestion")
+					post("/questions")
 					.contentType("application/json")
 					.content(objectMapper.writeValueAsString(question))
 				)
@@ -86,7 +86,7 @@ public class QuestionControllerTest {
 		String content = objectMapper.writeValueAsString(question);
 
 		mockMvc.perform(
-					post("/questions/addQuestion")
+					post("/questions")
 					.contentType("application/json")
 					.content(content)
 				)

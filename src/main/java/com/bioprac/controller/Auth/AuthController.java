@@ -4,7 +4,7 @@ import com.bioprac.model.user.User;
 import com.bioprac.repository.user.UserRepository;
 import com.bioprac.security.JwtAuthenticationResponse;
 import com.bioprac.security.JwtTokenProvider;
-import com.bioprac.security.UserService;
+import com.bioprac.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController

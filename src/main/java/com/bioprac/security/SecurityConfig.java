@@ -1,6 +1,7 @@
-package com.bioprac.configuration;
+package com.bioprac.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import static org.springframework.http.HttpMethod.*;
@@ -16,9 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.bioprac.security.JwtAuthenticationEntryPoint;
-import com.bioprac.security.JwtAuthenticationFilter;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -27,6 +25,8 @@ import com.bioprac.security.JwtAuthenticationFilter;
         prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Qualifier("userDetailsServiceImpl")
     @Autowired
     UserDetailsService userDetailsService;
 
@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(GET, "/questions/*").permitAll()
 		.antMatchers(GET, "/users").hasRole("ADMIN")
 		.antMatchers(POST, "/questions").hasAnyRole("ADMIN", "MODERATOR", "USER")
-		.antMatchers(DELETE, "/questions").hasAnyRole("ADMIN", "MODERATOR")
+		.antMatchers(DELETE).hasRole("ADMIN")
 		.antMatchers(PUT, "/questions").hasAnyRole("ADMIN", "MODERATOR", "USER")
 		.anyRequest()
 		.authenticated()

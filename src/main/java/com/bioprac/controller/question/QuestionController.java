@@ -30,9 +30,12 @@ import com.bioprac.util.BiopracResponse;
 @RestController
 @RequestMapping("/questions")
 public class QuestionController {
-	
-	@Autowired
+
 	private QuestionRepository questionRepository;
+
+	public QuestionController(@Autowired QuestionRepository questionRepository) {
+		this.questionRepository = questionRepository;
+	}
 
 	private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 	
