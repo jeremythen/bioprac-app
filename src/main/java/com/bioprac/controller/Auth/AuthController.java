@@ -22,9 +22,6 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     UserService userService;
 
     @Autowired

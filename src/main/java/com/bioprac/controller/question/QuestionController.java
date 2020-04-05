@@ -42,13 +42,6 @@ public class QuestionController {
 	@GetMapping()
 	@ResponseBody
 	public Iterable<Question> getQuestions() {
-
-		logger.info("In getQuestions()");
-		logger.error("Error in getQuestions");
-		logger.warn("Warn in getQuestions");
-		logger.debug("Debug in getQuestions");
-		logger.trace("Trace in getQuestions");
-
 		return questionRepository.findAll();
 	}
 
@@ -62,8 +55,6 @@ public class QuestionController {
 	@PostMapping()
 	public ResponseEntity<?> addQuestion(@Valid @RequestBody Question question) {
 
-
-		
 		questionRepository.save(question);
 		
 		Map<String, Object> responseMap = new HashMap<>();

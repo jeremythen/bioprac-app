@@ -16,6 +16,9 @@ public class ImportantQuestion {
 	@Column(nullable = false, name = "user_name")
 	private String userName;
 
+	
+
+
 	@Column(nullable = false, name = "question_id")
 	private int questionId;
 
