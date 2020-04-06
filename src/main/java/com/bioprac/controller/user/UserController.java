@@ -13,10 +13,7 @@ import com.bioprac.model.user.User;
 import com.bioprac.repository.user.UserRepository;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 @RestController
@@ -35,8 +32,28 @@ public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@GetMapping()
-	public Iterable<User> getUsers() {
-		return userRepository.findAll();
+	public List<Map<String, Object>> getUsers() {
+
+		Iterable<User> users = userRepository.findAll();
+		List<Map<String, Object>> userList = new ArrayList<>();
+
+		for(User user: users) {
+
+			Map<String, Object> userInfo = new HashMap<>();
+
+			userInfo.put("id", user.getId());
+			userInfo.put("name", user.getName());
+			userInfo.put("lastName", user.getLastName());
+			userInfo.put("username", user.getUsername());
+			userInfo.put("email", user.getEmail());
+			userInfo.put("role", user.getRole());
+
+			userList.add(userInfo);
+
+		}
+
+		return userList;
+
 	}
 
 	@PostMapping
