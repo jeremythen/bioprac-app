@@ -1,5 +1,7 @@
 package com.bioprac.model.practice;
 
+import com.bioprac.model.question.Question;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -16,11 +18,12 @@ public class ImportantQuestion {
 	@Column(nullable = false, name = "user_name")
 	private String userName;
 
-	
+	@ManyToOne
+	@JoinColumn(name = "question_id")
+	private Question question;
 
-
-	@Column(nullable = false, name = "question_id")
-	private int questionId;
+	//@Column(nullable = false, name = "question_id")
+	//private int questionId;
 
 	@Column(nullable = false, name = "created_at")
 	private LocalDateTime createdAt = LocalDateTime.now();
@@ -51,14 +54,6 @@ public class ImportantQuestion {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public int getQuestionId() {
-		return questionId;
-	}
-
-	public void setQuestionId(int questionId) {
-		this.questionId = questionId;
 	}
 
 	public LocalDateTime getCreatedAt() {
