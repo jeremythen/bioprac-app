@@ -1,6 +1,6 @@
 HELP.md
 
-application.properties
+
 data.sql
 
 target/
@@ -35,3 +35,4 @@ build/
 ### VS Code ###
 .vscode/
 
+src/main/resources/application.properties
